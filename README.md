@@ -9,15 +9,14 @@ Changes in this fork:<br>
 - A copy of the correct versions of Freetype 2.3.5 and GLText 0.3.1 are distributed here for convenience, along with their GPLv2 licenses.
 - Glut is also provided here for build convenience. 
 - The patches by Tristan for GLText which implement baking have been applied. The GLText here is patched.
-- A **binary** for bakeFonts.exe on Win64 is provided for ease of use.
-- The bakeFonts application code is in \bakeFonts
+- A binary for **bakeFonts.exe** on Win64 is provided for ease of use.
 - A VisualStudio 2019 solution for Freetype (x64) can be found in: F:\OpenGLText-baker\freetype-2.3.5\builds\win32\visualc
 - A VisualStudio 2019 solution for bakeFonts (x64) which directly builds GLText 0.3.1 can be found in: 
 F:\OpenGLText-baker\bakeFonts\
 
 ## Baking Fonts
 
-A **binary** for bakeFonts.exe on Win64 is provided for ease of use.<br>
+A binary for **bakeFonts.exe** on Win64 is provided for ease of use.<br>
 Fonts can be baked to .tga and .bin (glyph info) with the bakeFonts.exe binary:<br>
 ```
 > bakeFonts {font_name}.ttf {size}
@@ -26,6 +25,82 @@ Fonts can be baked to .tga and .bin (glyph info) with the bakeFonts.exe binary:<
 > bakeFonts arial.ttf 128
 ```
 Example TrueType fonts can be found in \fonts<br>
+
+## Rendering 
+
+Notes on rendering:
+- You don't strictly need OpenGLText in order to render the baked fonts.
+- All you need is to be able to read the .bin and .tga files.
+- Then perform your own OpenGL rendering as you like.
+- The file \gltext-0.3.1\src\AbstractRender.cpp contains the GlyphInfo and FileHeader structures which are written to the .bin file. 
+- The same file shows the saveFonts function, which shows the FileHeader includes all 256 glyphs, could be read in as a single fread.
+- The .tga can be converted to any desired image format and loaded as a GL texture.
+
+Here is the code I commonly use for rendering fonts:
+
+```
+void drawText ( Vec2F a, char* msg, Vec4F clr )
+{
+	int len = (int) strlen ( msg );
+	if ( len == 0 ) 
+		return;
+
+	gxVert* v = allocFontBuffer ( len*6, &gx.m_font_img );
+
+	// get current font
+	gxFont& font = gx.getCurrFont ();	
+	int glyphHeight = font.ascent + font.descent + font.linegap;
+	float lX = a.x;
+	float lY = a.y;
+	float lLinePosX = a.x;
+	float lLinePosY = a.y;
+	const char* c = msg;
+	int cnt = 0;
+	
+	// text_hgt = desired height of font in pixels
+	// text_kern = spacing between letters
+
+	float textSz = gx.m_text_hgt / glyphHeight;	// glyph scale
+	float textStartPy = textSz;					// start location in pixels
+	
+	while (*c != '\0' && cnt < len ) {
+		if ( *c == '\n' ) {
+			lX = lLinePosX;
+			lLinePosY += gx.m_text_hgt;
+			lY = lLinePosY;
+		} else if ( *c >=0 && *c <= 128 ) {
+			gxGlyph& gly = font.glyphs[*c];
+			float pX = lX + gly.offX * textSz;
+			float pY = lY + gly.offY * textSz; 
+			float pW = gly.width * textSz;
+			float pH = gly.height * textSz;
+	
+			// GRP_TRITEX is a triangle strip!
+			// repeat first point (jump), zero alpha
+			v->x = pX;		v->y = pY+pH;	v->z = 0;		vclr(v,clr, 0);		v->tx = gly.u; v->ty = gly.v;	v++;
+
+			// four corners of glyph, *NOTE*: Negative alpha indicates to shader we are drawing a font (not an image)			
+			v->x = pX;		v->y = pY+pH;	v->z = 0; 		vclr(v,clr, 1);		v->tx = gly.u; v->ty = gly.v;	v++;
+			v->x = pX;		v->y = pY ;		v->z = 0;		vclr(v,clr, 1);		v->tx = gly.u; v->ty = gly.v + gly.dv;	v++;			
+			v->x = pX+pW;	v->y = pY+pH;	v->z = 0;		vclr(v,clr, 1);		v->tx = gly.u + gly.du; v->ty = gly.v;	v++;			
+			v->x = pX+pW;	v->y = pY ;		v->z = 0; 		vclr(v,clr, 1);		v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv;	v++;
+
+			// repeat last point (jump), zero alpha
+			v->x = pX+pW;	v->y = pY;	v->z = 0;			vclr(v,clr, 0);		v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv;	v++;
+	
+			lX += (gly.advance + gx.m_text_kern) * textSz;
+			lY += 0;
+			cnt++;
+		}
+		c++;
+	}
+```
+
+- The function allocFontBuffer provides CPU memory for a triangle strip with space for 6 vertices per glyph (character), this memory can also be committed to the GPU as an OpenGL VBO.
+- The vertices, and their texture coords, are then streamed into the buffer. 
+- By allowing the buffer to expand, one can pack many calls to drawText into the **same** buffer.
+- With the VBO in memory, a shader selects a pixel from the GL texture using the provided texture coordinates, and writes a pixel with alpha blending and color if desired.
+- The resulting, single VBO, can be rendered very efficiently with a single draw call.
 
 ## Building
 
