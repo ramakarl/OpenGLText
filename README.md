@@ -17,11 +17,11 @@ F:\OpenGLText-baker\bakeFonts\
 
 ## Baking Fonts
 
-A **binary** for bakeFonts.exe on Win64 is provided for ease of use.
-Fonts can be baked to .tga and .bin (glyph info) with the bakeFonts.exe binary:
-> bakeFonts {font_name}.ttf {size}
-> bakeFonts arial.ttf 128
-Example TrueType fonts can be found in \fonts
+A **binary** for bakeFonts.exe on Win64 is provided for ease of use.<br>
+Fonts can be baked to .tga and .bin (glyph info) with the bakeFonts.exe binary:<br>
+> bakeFonts {font_name}.ttf {size}<br>
+> bakeFonts arial.ttf 128<br>
+Example TrueType fonts can be found in \fonts<br>
 
 ## Building
 
