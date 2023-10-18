@@ -45,7 +45,7 @@ void drawText ( Vec2F a, char* msg, Vec4F clr )
 	if ( len == 0 ) 
 		return;
 
-	gxVert* v = allocFontBuffer ( len*6, &gx.m_font_img );
+	gxVert* v = ExpandBuffer ( len*6, &gx.m_font_img );
 
 	// get current font
 	gxFont& font = gx.getCurrFont ();	
@@ -60,45 +60,44 @@ void drawText ( Vec2F a, char* msg, Vec4F clr )
 	// text_hgt = desired height of font in pixels
 	// text_kern = spacing between letters
 
-	float textSz = gx.m_text_hgt / glyphHeight;	// glyph scale
-	float textStartPy = textSz;					// start location in pixels
+	float textSz = gx.m_text_hgt / glyphHeight; // glyph scale
+	float textStartPy = textSz; // start location in pixels
 	
 	while (*c != '\0' && cnt < len ) {
-		if ( *c == '\n' ) {
-			lX = lLinePosX;
-			lLinePosY += gx.m_text_hgt;
-			lY = lLinePosY;
-		} else if ( *c >=0 && *c <= 128 ) {
-			gxGlyph& gly = font.glyphs[*c];
-			float pX = lX + gly.offX * textSz;
-			float pY = lY + gly.offY * textSz; 
-			float pW = gly.width * textSz;
-			float pH = gly.height * textSz;
-	
-			// GRP_TRITEX is a triangle strip!
-			// repeat first point (jump), zero alpha
-			v->x = pX;		v->y = pY+pH;	v->z = 0;		vclr(v,clr, 0);		v->tx = gly.u; v->ty = gly.v;	v++;
+	   if ( *c == '\n' ) {
+		lX = lLinePosX;
+		lLinePosY += gx.m_text_hgt;
+		lY = lLinePosY;
+	   } else if ( *c >=0 && *c <= 128 ) {
+		gxGlyph& gly = font.glyphs[*c];
+		float pX = lX + gly.offX * textSz;
+		float pY = lY + gly.offY * textSz; 
+		float pW = gly.width * textSz;
+		float pH = gly.height * textSz;
 
-			// four corners of glyph, *NOTE*: Negative alpha indicates to shader we are drawing a font (not an image)			
-			v->x = pX;		v->y = pY+pH;	v->z = 0; 		vclr(v,clr, 1);		v->tx = gly.u; v->ty = gly.v;	v++;
-			v->x = pX;		v->y = pY ;		v->z = 0;		vclr(v,clr, 1);		v->tx = gly.u; v->ty = gly.v + gly.dv;	v++;			
-			v->x = pX+pW;	v->y = pY+pH;	v->z = 0;		vclr(v,clr, 1);		v->tx = gly.u + gly.du; v->ty = gly.v;	v++;			
-			v->x = pX+pW;	v->y = pY ;		v->z = 0; 		vclr(v,clr, 1);		v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv;	v++;
+                // triangle strip:
+		// repeat first point (jump), zero alpha
+		v->x = pX; v->y = pY+pH; v->z = 0; vclr(v,clr, 0); v->tx = gly.u; v->ty = gly.v; v++;
+		// four corners of glyph
+		v->x = pX; v->y = pY+pH; v->z = 0; vclr(v,clr, 1); v->tx = gly.u; v->ty = gly.v; v++;
+		v->x = pX; v->y = pY ; v->z = 0; vclr(v,clr, 1); v->tx = gly.u; v->ty = gly.v + gly.dv;	v++;			
+		v->x = pX+pW; v->y = pY+pH; v->z = 0; vclr(v,clr, 1); v->tx = gly.u + gly.du; v->ty = gly.v; v++;			
+		v->x = pX+pW; v->y = pY; v->z = 0; vclr(v,clr, 1); v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv; v++;
+		// repeat last point (jump), zero alpha
+		v->x = pX+pW; v->y = pY; v->z = 0; vclr(v,clr, 0); v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv; v++;
 
-			// repeat last point (jump), zero alpha
-			v->x = pX+pW;	v->y = pY;	v->z = 0;			vclr(v,clr, 0);		v->tx = gly.u + gly.du; v->ty = gly.v + gly.dv;	v++;
-	
-			lX += (gly.advance + gx.m_text_kern) * textSz;
-			lY += 0;
-			cnt++;
-		}
-		c++;
+		lX += (gly.advance + gx.m_text_kern) * textSz;
+		lY += 0;
+		cnt++;
+	}
+	c++;
 	}
 ```
 
-- The function allocFontBuffer provides CPU memory for a triangle strip with space for 6 vertices per glyph (character), this memory can also be committed to the GPU as an OpenGL VBO.
-- The vertices, and their texture coords, are then streamed into the buffer. 
+- The function ExpandBuffer provides CPU memory for a triangle strip with space for 6 vertices per glyph (character), this memory can also be committed to the GPU as an OpenGL VBO.
 - By allowing the buffer to expand, one can pack many calls to drawText into the **same** buffer.
+- The vertices, and their texture coords, are then streamed into the buffer.
+- This example uses GL_TRIANGLE_STRIP with two extra, transparent vertices per glyph. One could also use a regular GL_TRIANGLES buffer.
 - With the VBO in memory, a shader selects a pixel from the GL texture using the provided texture coordinates, and writes a pixel with alpha blending and color if desired.
 - The resulting, single VBO, can be rendered very efficiently with a single draw call.
 
