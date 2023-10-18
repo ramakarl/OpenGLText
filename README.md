@@ -1,7 +1,6 @@
 # OpenGLText: Efficient and Simple GL Text Rendering
-# fork by R.Hoetzlein
-# original by T.Lorach
-# based on GLText 0.3.1 and Freetype2
+## fork by R.Hoetzlein
+## original by T.Lorach, based on GLText 0.3.1 and Freetype2
 
 This pair of cpp and h file provides a very easy way to draw text in OpenGL, *using fonts generated from Truetype fonts*.
 
