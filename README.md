@@ -19,8 +19,10 @@ F:\OpenGLText-baker\bakeFonts\
 
 A **binary** for bakeFonts.exe on Win64 is provided for ease of use.<br>
 Fonts can be baked to .tga and .bin (glyph info) with the bakeFonts.exe binary:<br>
+```
 > bakeFonts {font_name}.ttf {size}<br>
 > bakeFonts arial.ttf 128<br>
+```
 Example TrueType fonts can be found in \fonts<br>
 
 ## Building
@@ -32,21 +34,21 @@ Building:
 - Build bakeFonts from VS2019 solution provided, this also builds gltext-0.3.1
 - Freetype2 must be built and linked with FREETYPE2_STATIC define,
 specified in both Freetype2.sln and bakeFonts.sln
-- Here are the important VS2019 options:
-Working Directory: $(ProjectDir)/..  launch from top-level
-Additional Includes: 
-  \OpenGLText\freetype-2.3.5\include\;
-  \OpenGLText\gltext-0.3.1\src
-Preprocessor Defs: 
-  FREETYPE2_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)
-Linker Inputs:
-  opengl32.lib;
-  glu32.lib;
-  F:\OpenGLText\freetype-2.3.5\objs\freetype235_D.lib;
-  F:\OpenGLText\glut\glut64.lib; 
-  %(AdditionalDependencies)
-It is recommended to link Freetype 2.3.5 as a **static library**.
-This is done using the FREETYPE2_STATIC.
+- Here are the important VS2019 options:<br>
+Working Directory: $(ProjectDir)/..  launch from top-level<br>
+Additional Includes: <br>
+  \OpenGLText\freetype-2.3.5\include\;<br>
+  \OpenGLText\gltext-0.3.1\src<br>
+Preprocessor Defs: <br>
+  FREETYPE2_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)<br>
+Linker Inputs:<br>
+  opengl32.lib;<br>
+  glu32.lib;<br>
+  F:\OpenGLText\freetype-2.3.5\objs\freetype235_D.lib;<br>
+  F:\OpenGLText\glut\glut64.lib; <br>
+  %(AdditionalDependencies)<br>
+- It is recommended to link Freetype 2.3.5 as a **static library**.<br>
+- This is done using the FREETYPE2_STATIC.<br>
 - Sorry I am unable to provide a CMake at this time. Others are welcome to do so.
 
 ------------------------------
