@@ -1,6 +1,6 @@
 # OpenGLText: Efficient and Simple GL Text Rendering
-## fork by R.Hoetzlein
-## original by T.Lorach, based on GLText 0.3.1 and Freetype2
+## fork by [Rama Karl](http://ramakarl.com)
+## original by Tristan Lorach, based on GLText 0.3.1 and Freetype2
 
 This fork is for build convenience on Windows.
 OpenGLText and bakeFonts provide a simple utility to render font atlases for efficient OpenGL rendering.
