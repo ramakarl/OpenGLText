@@ -105,7 +105,7 @@ void drawText ( Vec2F a, char* msg, Vec4F clr )
 
 - If you write your own renderer, you can use any license you like.
 - As the rendering example above demonstrates one can write a simple, independent GL text render for these baked .bin/.tga 
-- It is not necessary to link OpenGLText/GLText/Freetype2 to your own game or application.
+- It is not necessary to link OpenGLText, GLText or Freetype2 to your own game or application.
 - You only need these libraries if you plan to rebuild bakeFonts or OpenGLText:
 - Freetype2 is BSD or GPLv2 licensed. This work uses the GPLv2 license.
 - GLText is GLPv2 licensed.
