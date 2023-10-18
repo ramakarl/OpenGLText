@@ -1,5 +1,5 @@
 # OpenGLText: Efficient and Simple GL Text Rendering
-## fork by [Rama Karl](http://ramakarl.com)
+## fork by [Rama Karl](http://ramakarl.com) for Windows
 ## original by Tristan Lorach, based on GLText 0.3.1 and Freetype2
 
 This fork is for build convenience on Windows.<br>
