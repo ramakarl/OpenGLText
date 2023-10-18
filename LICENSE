@@ -3,7 +3,7 @@ License Summary:
 - If you write your own renderer, you can use any license you like.
 - It is not necessary to link OpenGLText, GLText or Freetype2 to your own game or application in order to render.
 - You only need these libraries if you plan to rebuild bakeFonts or OpenGLText:
-- Freetype2 is BSD or LGPLv2 licensed. This work uses the GPLv2 license.
+- Freetype2 is BSD or GPLv2 licensed (not LGPL). This work uses the GPLv2 license.
 - glText 0.3.1 is LGPLv2 licensed.
 - bakeFonts is LGPLv2 licensed (as a patch, 95% of its code is GLText)
 
