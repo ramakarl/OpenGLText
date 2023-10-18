@@ -16,7 +16,7 @@ F:\OpenGLText-baker\bakeFonts\
 
 ## Idea
 
-A simple way to render fonts in OpenGL is to use a _texture atlas_. This contains a TrueType font which has been pre-rendered at a specific resolution into a grayscale image. One also needs the position, spacing and glyph info for each character in the texture. This metadata is stored in an auxiliary .bin file. While the baking process can be involved, and requires the ability to render TrueType fonts, using a baking process that requires Freetype2, GLText and Tristan's bakeFonts patches. However, once a font has been baked, all one needs to do for rendering is read the glyph data and font texture atlas and then render the desired text as triangles with suitable texture coordinates to select letters. Thus rendering does not require linking to any of these libraries. See more on Baking and Rendering below.
+A simple way to render fonts in OpenGL is to use a _texture atlas_. This contains a TrueType font in which each letter has been pre-rendered at a specific resolution into a grayscale image. One also needs the position, spacing and glyph info for each character in the texture. This metadata is stored in an auxiliary .bin file. While the baking process can be involved, and requires the ability to render TrueType fonts, using a baking process that requires Freetype2, GLText and Tristan's bakeFonts patches. However, once a font has been baked, all one needs to do for rendering is read the glyph data and font texture atlas and then render the desired text as triangles with suitable texture coordinates to select letters. Thus rendering does not require linking to any of these libraries. See more on Baking and Rendering below.
 
 ## Baking Fonts
 
