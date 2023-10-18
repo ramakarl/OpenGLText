@@ -98,6 +98,7 @@ void drawText ( Vec2F a, char* msg, Vec4F clr )
 	}
 ```
 
+- I prefer this method of rendering because I don't need an object/class to draw text. After preparation one could call the C-style drawText from anywhere.
 - The function ExpandBuffer provides CPU memory for a triangle strip with space for 6 vertices per glyph (character), this memory can also be committed to the GPU as an OpenGL VBO.
 - By allowing the buffer to expand, one can pack many calls to drawText into the **same** buffer.
 - The vertices, and their texture coords, are then streamed into the buffer.
