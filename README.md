@@ -2,10 +2,10 @@
 ## fork by [Rama Karl](http://ramakarl.com)
 ## original by Tristan Lorach, based on GLText 0.3.1 and Freetype2
 
-This fork is for build convenience on Windows.
+This fork is for build convenience on Windows.<br>
 OpenGLText and bakeFonts provide a simple utility to render font atlases for efficient OpenGL rendering.
 
-Changes in this fork:
+Changes in this fork:<br>
 - A copy of the correct versions of Freetype 2.3.5 and GLText 0.3.1 are distributed here for convenience, along with their GPLv2 licenses.
 - Glut is also provided here for build convenience. 
 - The patches by Tristan for GLText which implement baking have been applied. The GLText here is patched.
