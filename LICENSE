@@ -1,6 +1,13 @@
-Freetype2 has a dual BSD or GPLv2 license. This work uses the GPLv2 license.
-gltext 0.3.1 has a GPLv2 license.
-OpenGLText is GPLv2 licensed.  
+License summary:
+
+- Freetype2 has a dual BSD or GPLv2 license. This work uses the GPLv2 license.
+
+- gltext 0.3.1 has a GPLv2 license.
+
+- OpenGLText is GPLv2 licensed.  
+
+Note that a copy of the dependent libraries are distributed here 
+for build convencience, while their licenses apply here.
 
 -----------------------------------------------------------------------
            GNU GENERAL PUBLIC LICENSE
