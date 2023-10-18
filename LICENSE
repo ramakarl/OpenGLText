@@ -1,10 +1,12 @@
-License summary:
+License Summary:
 
-- Freetype2 has a dual BSD or GPLv2 license. This work uses the GPLv2 license.
-
-- gltext 0.3.1 has a GPLv2 license.
-
-- OpenGLText is GPLv2 licensed.  
+- If you write your own renderer, you can use any license you like.
+- As the rendering example above demonstrates one can write a simple, independent GL text render for these baked .bin/.tga
+- It is not necessary to link OpenGLText, GLText or Freetype2 to your own game or application.
+- You only need these libraries if you plan to rebuild bakeFonts or OpenGLText:
+- Freetype2 is BSD or GPLv2 licensed. This work uses the GPLv2 license.
+- glText 0.3.1 is GPLv2 licensed.
+- bakeFonts is GPLv2 licensed (as a patch, 95% of its code is GLText)
 
 Note that a copy of the dependent libraries are distributed here 
 for build convencience, while their licenses apply here.
